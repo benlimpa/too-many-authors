@@ -26,14 +26,10 @@ class GamePage extends React.Component {
     firestore
       .collection("games")
       .doc(this.id)
-      .collection("entries")
-      .get()
-      .then(function(snapshot) {
-        this.setState({ entries: snapshot.docs });
+      .onSnapshot((docSnap) => {
+        docSnap.ref.collection('entries').get().then((docs) => {this.setState({ entries: docs});})
+        console.log("entries updated");
       })
-      .catch(function(err) {
-        console.error("no matching entries: " + err);
-      });
   }
 
   onKeyUp = e => {
