@@ -14,7 +14,7 @@ export default class _ extends React.Component {
           <Switch>
             <Route exact path="/" component={Home} />
             <Route exact path="/games/:id" component={Game} />
-            <Route path="/*" component={() => <Redirect to="/"/>} />
+            <Route path="/*" component={() => <Redirect to="/" />} />
           </Switch>
         </div>
       </BrowserRouter>
