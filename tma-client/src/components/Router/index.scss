@@ -1,0 +1,44 @@
+body {
+  --q: #262626;
+  --w: #4d4d4d;
+  --e: #808080;
+  --r: #d9d9d9;
+  --t: #f2f2f2;
+  --y: #ffffff;
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+}
+
+html, body, div {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+}
+
+.b {
+  border: 1px solid red;
+}
+
+h1, h2, h3, h4, h5, h6, a, input {
+  margin: 0;
+  font-weight: 300;
+  color: var(--w)
+}
+
+a {
+  text-decoration: none;
+}
+
+.row {
+  flex-direction: row;
+}
+
+.f {
+  flex: 1;
+}
+
+.xy {
+  justify-content: center;
+  align-items: center;
+}
