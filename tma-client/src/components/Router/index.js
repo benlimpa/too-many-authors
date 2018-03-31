@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
 import Header from '../Header';
 import Home from '../Home';
-import Browse from '../Browse';
 import Game from '../Game';
 import Archive from '../Archive';
 import Login from '../Login';
@@ -54,10 +53,15 @@ export default class _ extends React.Component {
           <Route path="/" component={Header} />
           <Switch>
             <Route exact path="/" component={Home} />
+<<<<<<< HEAD
             <RouteWhenAuthorized exact path="/browse" component={Browse} />
             <Route exact path="/game/:id" component={Game} />
             <Route exact path="/archive" component={Archive} />
             <Route exact path="/login" component={Login} />
+=======
+            <Route exact path="/games/:id" component={Game} />
+            <Route path="/*" component={() => <Redirect to="/"/>} />
+>>>>>>> 8845f1a79bc763eade2fe45a196b5a64a08acbba
           </Switch>
         </div>
       </BrowserRouter>
