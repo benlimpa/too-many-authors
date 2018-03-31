@@ -1,6 +1,6 @@
-import React from 'react';
-import { Link } from 'react-router-dom'
-import './index.css';
+import React from "react";
+import { Link } from "react-router-dom";
+import "./index.css";
 
 export default class _ extends React.Component {
   render() {
@@ -9,7 +9,7 @@ export default class _ extends React.Component {
         <Link to="/">
           <h2>Too Mant Authors</h2>
         </Link>
-        <div className="row"></div>
+        <div className="row" />
       </div>
     );
   }
