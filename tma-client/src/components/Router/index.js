@@ -53,7 +53,7 @@ export default class _ extends React.Component {
           <Switch>
             <Route exact path="/" component={Home} />
             <Route exact path="/login" component={Login} />
-            <Route exact path="/games/:id" component={Game} />
+            <Route exact path="/game/:id" component={Game} />
             <Route path="/*" component={() => <Redirect to="/" />} />
           </Switch>
         </div>
