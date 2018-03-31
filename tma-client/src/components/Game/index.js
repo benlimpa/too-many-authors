@@ -19,8 +19,9 @@ class GamePage extends React.Component {
     componentDidMount() {
         console.log(this.id);
 
-        firestore.collection('games').doc(this.id).collection('entries').get().then(function(snapshot) {
+        firestore.collection('games').doc(this.id).collection('entries').get().then(snapshot => {
             this.setState({entries: snapshot.docs});
+            console.log('SNAPSHOT.DOCS', snapshot.docs)
         })
         .catch(function(err) {console.error("no matching entries: " + err)});
     }

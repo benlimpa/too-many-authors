@@ -23,7 +23,7 @@ export default class _ extends React.Component {
           </Link>
           {this.state.games.map((game, i) => {
             return (
-              <Link to={`/game/${game.id}`} className="preview">
+              <Link key={i} to={`/game/${game.id}`} className="preview">
 
               </Link>
             );
@@ -35,7 +35,7 @@ export default class _ extends React.Component {
         <div className="row preview-container">
           {this.state.archives.map((archive, i) => {
             return (
-              <Link to={`/game/${archive.id}`} className="preview">
+              <Link key={i} to={`/game/${archive.id}`} className="preview">
 
               </Link>
             );
