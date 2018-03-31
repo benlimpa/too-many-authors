@@ -7,7 +7,7 @@ export default class _ extends React.Component {
     return (
       <div className="header row">
         <Link to="/">
-          <h2>Too Mant Authors</h2>
+          <h2>Too Many Authors</h2>
         </Link>
         <div className="row" />
       </div>

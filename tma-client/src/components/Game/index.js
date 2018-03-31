@@ -26,9 +26,16 @@ class GamePage extends React.Component {
     firestore
       .collection("games")
       .doc(this.id)
+<<<<<<< HEAD
       .onSnapshot((docSnap) => {
         docSnap.ref.collection('entries').get().then((docs) => {this.setState({ entries: docs});})
         console.log("entries updated");
+=======
+      .collection("entries")
+      .get()
+      .then((snapshot) => {
+        this.setState({ entries: snapshot.docs });
+>>>>>>> 2aaaa195827c8bda6e6312ededbc57c2da2b738b
       })
   }
 
