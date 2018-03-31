@@ -53,15 +53,11 @@ export default class _ extends React.Component {
           <Route path="/" component={Header} />
           <Switch>
             <Route exact path="/" component={Home} />
-<<<<<<< HEAD
             <RouteWhenAuthorized exact path="/browse" component={Browse} />
-            <Route exact path="/game/:id" component={Game} />
             <Route exact path="/archive" component={Archive} />
             <Route exact path="/login" component={Login} />
-=======
             <Route exact path="/games/:id" component={Game} />
             <Route path="/*" component={() => <Redirect to="/"/>} />
->>>>>>> 8845f1a79bc763eade2fe45a196b5a64a08acbba
           </Switch>
         </div>
       </BrowserRouter>
