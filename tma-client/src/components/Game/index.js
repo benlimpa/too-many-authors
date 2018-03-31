@@ -5,7 +5,7 @@ import UidProvider from '../../firebase/UidProvider';
 
 export default class _ extends React.Component {
     render() {
-        return (<UidProvider>{(uid) => (<GamePage uid={uid} />)}<UidProvider>);
+        return (<UidProvider>{(uid) => (<GamePage uid={uid} id={this.props.match.params.id} />)}</UidProvider>);
     }
 }
 
@@ -14,16 +14,16 @@ class GamePage extends React.Component {
         entries: [],
     }
 
-    id = this.props.match.params.id;
+    id = this.props.id;
 
     componentDidMount() {
         console.log(this.id);
 
-        console.log(this.props.match.params.id);
         firestore.collection('games').doc(this.id).collection('entries').get().then(function(snapshot) {
             this.setState({entries: snapshot.docs});
         })
         .catch(function(err) {console.error("no matching entries: " + err)});
+    }
 
     onKeyUp = (e) => {
 
