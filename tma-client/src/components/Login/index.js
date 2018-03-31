@@ -7,14 +7,21 @@ export default class _ extends React.Component {
   state = {
     email: '',
     password: '',
-    redirectToReferrer: false
+    redirectToReferrer: false,
+    loginFailed: false
   }
 
   handleSubmit = (evt) => {
     evt.preventDefault();
-    auth.signInWithEmailAndPassword(this.state.email, this.state.password).then(() => {
-      this.setState({redirectToReferrer: true});
-    });
+    try {
+        auth.signInWithEmailAndPassword(this.state.email, this.state.password).then(() => {
+          this.setState({redirectToReferrer: true});
+        });
+    }
+    catch (err)
+    {
+        this.setState({loginFailed: true});
+    }
   }
 
   render() {
@@ -24,7 +31,7 @@ export default class _ extends React.Component {
     return (
       <section>
         {redirectToReferrer && (
-          <Redirect to={from || '/browse'}/>
+          <Redirect to={from || '/'}/>
         )}
         {from && (
           <p>You must log in to view the page at {from.pathname}</p>
@@ -34,6 +41,7 @@ export default class _ extends React.Component {
           <input type="password" value={this.state.password} onChange={e => this.setState({password: e.target.value})} />
           <button type="submit">Sign In</button>
         </form>
+        {this.state.loginFailed && (<p>Login failed</p>)}
       </section>
     );
   }

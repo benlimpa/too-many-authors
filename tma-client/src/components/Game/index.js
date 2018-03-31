@@ -1,48 +1,42 @@
 import React from 'react';
 import './index.css';
 import { firestore } from  '../../firebase/firebase';
+import UidProvider from '../../firebase/UidProvider';
 
 export default class _ extends React.Component {
+    render() {
+        return (<UidProvider>{(uid) => (<GamePage uid={uid} />)}<UidProvider>);
+    }
+}
+
+class GamePage extends React.Component {
     state = {
-        messages: [],
-
-
+        entries: [],
     }
 
     id = this.props.match.params.id;
-
 
     componentDidMount() {
         console.log(this.id);
 
         console.log(this.props.match.params.id);
-        firestore.collection("messsages").doc(this.props.match.params.id).onSnapshot(function(doc){
-            if(doc.exists){
-                console.log("Current data: ", doc.data());
-                //update messages first
-                // if(doc.data())
-                //     this.state.messages = doc.data();
-            }
-            else{
-                console.log("new doc");
-            }
+        firestore.collection('games').doc(this.id).collection('entries').get().then(function(snapshot) {
+            this.setState({entries: snapshot.docs});
         })
-    }
+        .catch(function(err) {console.error("no matching entries: " + err)});
 
     onKeyUp = (e) => {
 
         if(e.keyCode === 13 && e.target.value !== ''){
             e.preventDefault();
-            // let dbCon = this.props.db.ref('/messages');
-            firestore.collection('messages').doc(this.id).set({
+            firestore.collection('games').doc(this.id).collection('entries').add({
+                uid: this.props.uid,
+                timeStamp: Date.now(),
                 message: e.target.value
             })
             .catch(function(error) {
                 console.error("error writing document: ", error);
             });
-            // this.setState({
-            //     message: ''
-            // });
             e.target.value = '';
         }
     }
