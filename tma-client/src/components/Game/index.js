@@ -28,7 +28,7 @@ class GamePage extends React.Component {
       .doc(this.id)
       .collection("entries")
       .get()
-      .then(function(snapshot) {
+      .then((snapshot) => {
         this.setState({ entries: snapshot.docs });
       })
       .catch(function(err) {
