@@ -4,7 +4,7 @@ import './index.css';
 export default class _ extends React.Component {
   render() {
     return (
-      null
+      <h1>Game</h1>
     );
   }
 }
