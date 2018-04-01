@@ -13,11 +13,19 @@ export default class _ extends React.Component {
   };
 
   render() {
+    console.log('state', this.state)
+    let id = generate();
+
     return (
       <div className="home">
         <h2>Games</h2>
         <div className="row preview-container">
-          <Link className="preview xy" to={`/game/${generate()}`}>
+          <Link
+            className="preview xy"
+            to={`/game/${id}`}
+            onClick={() => {
+              db.ref(`/${this.id}`).update({ active: true });
+            }}>
             <img
               alt="plus"
               src={require("../../assets/plus.svg")}
@@ -48,5 +56,24 @@ export default class _ extends React.Component {
         </div>
       </div>
     );
+  }
+
+  componentDidMount() {
+    db.ref('/').on('value', snap => {
+      let data = snap.val();
+      let games = [];
+      let archives = [];
+      Object.keys(data).forEach(key => {
+        if (key !== 'players') {
+          if (data[key].active) {
+            games.push(data[key]);
+          } else {
+            archives.push(data[key]);
+          }
+        }
+      });
+
+      this.setState({ games, archives });
+    });
   }
 }

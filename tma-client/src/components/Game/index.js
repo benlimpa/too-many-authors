@@ -93,10 +93,9 @@ class GamePage extends React.Component {
   }
 
   componentDidMount() {
-    db
-      .ref(`/${this.id}/players/${this.props.uid}`)
-      .set({ name: "bob", active: false });
-    db.ref(`/${this.id}/players`).on("value", snap => {
+    console.log('THIS.PROPS.UID', this.props.uid)
+    db.ref(`/${this.id}/players/${this.props.uid}`).set({ name: 'bob', active: false });
+    db.ref(`/${this.id}/players`).on('value', snap => {
       this.setState({ players: Object.values(snap.val() || {}) });
     });
     db.ref(`/${this.id}/entries`).on("value", snap => {
