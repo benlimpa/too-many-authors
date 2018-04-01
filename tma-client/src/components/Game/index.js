@@ -35,8 +35,8 @@ class GamePage extends React.Component {
             {entries.map((entry, i) => {
               return (
                 <div key={i} className="entry">
-                  <h4 className="name">{entry.name || "name"}</h4>
-                  <h4 className="message">{entry.message}</h4>
+                  <h2 className="name">{entry.name || "name"}</h2>
+                  <h2 className="message">{entry.message}</h2>
                   <div className="images row">
                     {(entry.images || ["", "", ""]).map((url, i) => {
                       return (
@@ -58,7 +58,7 @@ class GamePage extends React.Component {
           <div className="">
             <input
               className="textarea f"
-              placeholder="Type a message"
+              placeholder="Continue the story. . . "
               cols="100"
               value={message}
               onKeyUp={this.onKeyUp}
