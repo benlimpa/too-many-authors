@@ -1,6 +1,6 @@
 import React from "react";
 import * as auth from "../../firebase/auth";
-import { Redirect, withRouter } from "react-router-dom";
+import { withRouter } from "react-router-dom";
 import "./index.css";
 
 const LoginPage = ({ history }) => (<LoginCorePage history={history} />);
