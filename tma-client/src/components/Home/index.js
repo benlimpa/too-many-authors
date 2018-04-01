@@ -24,7 +24,7 @@ export default class _ extends React.Component {
             className="preview xy"
             to={`/game/${id}`}
             onClick={() => {
-              db.ref(`/${this.id}`).update({ active: true, entries: [], players: [] });
+              db.ref(`/${this.id}`).update({ active: true });
             }}>
             <img
               alt="plus"

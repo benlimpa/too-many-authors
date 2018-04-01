@@ -29,6 +29,7 @@ class GamePage extends React.Component {
   render() {
     let { entries, message, rounds, players } = this.state;
     return (
+<<<<<<< HEAD
       <div className="game row f">
         <div className="entries-input-container">
           <div className="entries">
@@ -62,6 +63,29 @@ class GamePage extends React.Component {
               onChange={e => this.setState({ message: e.target.value })}
             />
           </div>
+=======
+
+        <div class="container">
+        <div id="gameTitle">
+        <h3>{title}</h3>
+        </div>
+        <div id="cont1">
+          <h1 class="h">Game</h1>
+          <p id="rounds"> Rounds {curRounds}/{maxRounds}</p>
+          <p id="gamecode">Game Code {id} </p>
+          <p id="turnIs"> It is {names[turn]}s turn</p>
+          <h2 class="h">Players</h2>
+          <p id="names">
+          {arrayNames}
+          </p>
+            </div>
+            <div>
+            <form>
+                <textarea className="textarea" placeholder="Continue the story........" cols="100" onKeyUp={this.onKeyUp}>
+                </textarea>
+            </form>
+            </div>
+>>>>>>> 309fa08699e13435ba1c4594c089c19a6acf74bb
         </div>
         <div className="stats">
           <h2>Players</h2>
