@@ -4,6 +4,8 @@ import React from "react";
 import "./index.css";
 import { db } from "../../firebase/firebase";
 import UidProvider from "../../firebase/UidProvider";
+const NLP = require('google-nlp');
+
 
 export default class _ extends React.Component {
   render() {
