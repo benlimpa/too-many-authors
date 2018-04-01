@@ -1,37 +1,43 @@
 import React from "react";
-import { auth } from "../../firebase/firebase";
-import { Redirect } from "react-router";
+import * as auth from "../../firebase/auth";
+import { Redirect, withRouter } from "react-router-dom";
 import "./index.css";
 
-export default class _ extends React.Component {
+const LoginPage = ({ history }) => (<LoginCorePage history={history} />);
+
+const INIT_STATE = {
+  email: "",
+  password: "",
+  error: null
+};
+
+const byPropKey = (propertyName, value) => () => ({
+  [propertyName]: value,
+});
+
+class LoginCorePage extends React.Component {
   state = {
-    email: "",
-    password: "",
-    redirectToReferrer: false,
-    loginFailed: false
+    ...INIT_STATE
   };
 
   handleSubmit = evt => {
     evt.preventDefault();
-    try {
-      auth
-        .signInWithEmailAndPassword(this.state.email, this.state.password)
-        .then(() => {
-          this.setState({ redirectToReferrer: true });
-        });
-    } catch (err) {
-      this.setState({ loginFailed: true });
-    }
+    const {email, password} = this.state;
+    const {history} = this.props;
+    
+    auth.doSignInWithEmailAndPassword(email, password)
+    .then(() => {
+      this.setState(() => ({...INIT_STATE}));
+      history.push('/');
+    })
+    .catch(err => {
+      this.setState(byPropKey('error', err));
+    });
   };
 
   render() {
-    const { from } = this.props.location.state || "/";
-    const { redirectToReferrer } = this.state;
-
     return (
       <section>
-        {redirectToReferrer && <Redirect to={from || "/"} />}
-        {from && <p>You must log in to view the page at {from.pathname}</p>}
         <form onSubmit={this.handleSubmit}>
           <input
             type="text"
@@ -45,8 +51,10 @@ export default class _ extends React.Component {
           />
           <button type="submit">Sign In</button>
         </form>
-        {this.state.loginFailed && <p>Login failed</p>}
+        {this.state.error && <p>Login failed</p>}
       </section>
     );
   }
 }
+
+export default withRouter(LoginPage);

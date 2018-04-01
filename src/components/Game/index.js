@@ -3,7 +3,6 @@
 import React from "react";
 import "./index.css";
 import { db, firestore } from "../../firebase/firebase";
-import UidProvider from "../../firebase/UidProvider";
 //const NLP = require('google-nlp');
 
 const players = {
@@ -15,16 +14,6 @@ const players = {
 };
 
 export default class _ extends React.Component {
-  render() {
-    return (
-      <UidProvider>
-        {uid => <GamePage uid={uid} id={this.props.match.params.id} />}
-      </UidProvider>
-    );
-  }
-}
-
-class GamePage extends React.Component {
   state = {
     entries: [],
     message: "",
@@ -101,15 +90,15 @@ class GamePage extends React.Component {
   }
 
   componentDidMount() {
-    console.log('THIS.PROPS.UID', this.props.uid)
+    console.log('this.props.authUser.uid', this.props.authUser.uid)
 
-    // db.ref(`/players/${this.props.uid}`).on('value', snap => {
-    //   db.ref(`/${this.id}/players/${this.props.uid}`).set({ name: snap.val(), active: false });
-    // });
+    db.ref(`/players/${this.props.authUser.uid}`).on('value', snap => {
+      db.ref(`/${this.id}/players/${this.props.authUser.uid}`).set({ name: snap.val(), active: false });
+    });
 
     console.log(players);
 
-    db.ref(`/${this.id}/players/${this.props.uid}`).set({ name: players[this.props.uid], active: false });
+    // db.ref(`/${this.id}/players/${this.props.authUser.uid}`).set({ name: players[this.props.authUser.uid], active: false });
 
     db.ref(`/${this.id}/players`).on('value', snap => {
       this.setState({ players: Object.values(snap.val() || {}) });
@@ -147,7 +136,7 @@ class GamePage extends React.Component {
         console.log(words);
 
         db
-          .ref(`/players/${this.props.uid}`)
+          .ref(`/players/${this.props.authUser.uid}`)
           .once("value")
           .then(snapshot => {
             db.ref(`/${this.id}/entries`).push({

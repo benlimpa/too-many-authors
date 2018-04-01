@@ -27,38 +27,35 @@ const RouteWhenAuthorized = ({ component: Component, ...rest }) => (
 );
 
 export default class _ extends React.Component {
-  static childContextTypes = {
-    uid: PropTypes.string
-  };
-
-  getChildContext() {
-    return { uid: this.state.uid };
+  constructor(props) {
+    super(props);
+    this.state = {
+      authUser: null
+    };
   }
-  state = {
-    uid: null
-  };
+
 
   componentDidMount() {
     auth.onAuthStateChanged(user => {
       if (user) {
-        window.localStorage.setItem(storageKey, user.uid);
-        this.setState({ uid: user.uid });
+        this.setState({ authUser: user });
       } else {
-        window.localStorage.removeItem(storageKey);
-        this.setState({ uid: null });
+        this.setState({ authUser: null });
       }
     });
   }
 
   render() {
+    let tempAuthUser = this.state.authUser;
+    console.log("authuser: " + this.state.authUser);
     return (
       <BrowserRouter>
         <div>
-          <Route path="/" component={Header} />
+          <Route path="/" render={(props) => <Header authUser={auth.currentUser} />} />
           <Switch>
-            <Route exact path="/" component={Home} />
+            <RouteWhenAuthorized exact path="/" component={Home} />
             <Route exact path="/login" component={Login} />
-            <Route exact path="/game/:id" component={Game} />
+            <Route exact path="/game/:id" render={(p) => <Game id={p.match.params.id} authUser={auth.currentUser} />} />
             <Route path="/*" component={() => <Redirect to="/" />} />
           </Switch>
         </div>

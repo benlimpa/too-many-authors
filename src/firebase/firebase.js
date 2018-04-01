@@ -23,5 +23,5 @@ export const storageKey = 'LOCAL_STORAGE_KEY';
 export const firestore = firebase.firestore();
 
 export const isAuthenticated = () => {
-    return !!auth.currentUser || !!localStorage.getItem(storageKey);
+    return !!auth.currentUser;
 }
