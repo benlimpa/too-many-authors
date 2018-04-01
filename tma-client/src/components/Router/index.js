@@ -46,6 +46,7 @@ export default class _ extends React.Component {
       } else {
         window.localStorage.removeItem(storageKey);
         this.setState({ uid: null });
+        console.log("user id is null");
       }
     });
   }

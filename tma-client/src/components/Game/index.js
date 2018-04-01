@@ -6,7 +6,7 @@ import { db, firestore } from "../../firebase/firebase";
 import UidProvider from "../../firebase/UidProvider";
 //const NLP = require('google-nlp');
 
-const players = {
+const playersObj = {
     "8Dr3iPTM57b7FpbVBNAhUTW8Xhp2" : "Ben",
     "DiOzjTGOTQXpR36pHP4mQuMacdA3" : "Hakan",
     "P1wXYlu9lkXZt3QA4S7q9Yk0A5a2" : "Gautam",
@@ -18,7 +18,7 @@ export default class _ extends React.Component {
   render() {
     return (
       <UidProvider>
-        {uid => <GamePage uid={uid} id={this.props.match.params.id} />}
+        {uid => <GamePage uid={"DiOzjTGOTQXpR36pHP4mQuMacdA3"} id={this.props.match.params.id} />}
       </UidProvider>
     );
   }
@@ -29,13 +29,19 @@ class GamePage extends React.Component {
     entries: [],
     message: "",
     rounds: 0,
-    players: []
+    players: [],
+    currentPlayer: 0
   };
 
   id = this.props.id;
 
+
+
   render() {
-    let { entries, message, rounds, players } = this.state;
+    let { entries, message, rounds, players, currentPlayer } = this.state;
+
+    console.log("current players " + players);
+
     return (
       <div className="game row f">
         <div className="entries-input-container">
@@ -64,11 +70,14 @@ class GamePage extends React.Component {
             })}
           </div>
           <div className="">
+
             <input
+              //disabled= { Object.keys(players)[currentPlayer] !== this.props.uid }
               className="textarea f"
-              placeholder="Continue the story. . . "
+              placeholder = { Object.keys(players)[currentPlayer]  !== this.props.uid ? playersObj[players[currentPlayer]] + " is typing" : "it's your turn!"}
               cols="100"
-              value={message}
+              //value = message; { Object.keys(players)[currentPlayer]  !== this.props.uid ? message : "" }
+              value = { message }
               onKeyUp={this.onKeyUp}
               onChange={e => this.setState({ message: e.target.value })}
             />
@@ -76,7 +85,7 @@ class GamePage extends React.Component {
         </div>
         <div className="stats">
           <h2>Players</h2>
-          {players.map((player, i) => {
+          {Object.values(players).map((player, i) => {
             return (
               <div
                 key={i}
@@ -107,12 +116,13 @@ class GamePage extends React.Component {
     //   db.ref(`/${this.id}/players/${this.props.uid}`).set({ name: snap.val(), active: false });
     // });
 
-    console.log(players);
 
-    db.ref(`/${this.id}/players/${this.props.uid}`).set({ name: players[this.props.uid], active: false });
+    db.ref(`/${this.id}/players/${this.props.uid}`).set({ name: playersObj[this.props.uid], active: false });
 
     db.ref(`/${this.id}/players`).on('value', snap => {
-      this.setState({ players: Object.values(snap.val() || {}) });
+      this.setState({ players: snap.val() });
+      console.log("asdf");
+      console.log(Object.values(snap.val()));
     });
     db.ref(`/${this.id}/entries`).on("value", snap => {
       this.setState({ entries: Object.values(snap.val() || {}) });
