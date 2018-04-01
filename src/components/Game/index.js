@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars*/
 
 import React from "react";
-import axios from 'axios';
+import axios from "axios";
 import "./index.css";
 import { db, firestore } from "../../firebase/firebase";
 //const NLP = require('google-nlp');
@@ -13,6 +13,28 @@ const playersObj = {
   IKTQwJzNbshEXyNj8gDjMLEnY0Y2: "Sandro",
   ZddSsMJLAvgE9jnH46KfOun3JXZ2: "Michael"
 };
+
+class AltImage extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      showAlt: false,
+      altURL: "https://source.unsplash.com/500x500/?" + props.word
+    };
+  }
+  handleError = () => {
+    this.setState({ showAlt: true });
+  };
+  render() {
+    return (
+      <img
+        onError={this.handleError}
+        src={this.state.showAlt ? this.state.altURL : this.props.src}
+        alt="image"
+      />
+    );
+  }
+}
 
 export default class _ extends React.Component {
   state = {
@@ -46,16 +68,24 @@ export default class _ extends React.Component {
                     <h2 className="message">{entry.message}</h2>
                   ) : null}
                   <div className="images row">
-                    {(entry.images || ["", "", ""]).map((url, i) => {
+                    {(entry.images || ["", "", ""]).map((imageEntry, i) => {
                       return (
-                        <img
+                        <AltImage
                           key={i}
+                          word={imageEntry.word}
                           src={
-                            url ||
+                            imageEntry.url ||
                             "http://www.pixedelic.com/themes/geode/demo/wp-content/uploads/sites/4/2014/04/placeholder4.png"
                           }
-                          alt="image"
                         />
+                        // <img
+                        //   key={i}
+                        //   src={
+                        //     url ||
+                        //     "http://www.pixedelic.com/themes/geode/demo/wp-content/uploads/sites/4/2014/04/placeholder4.png"
+                        //   }
+                        //   alt="image"
+                        // />
                       );
                     })}
                   </div>
@@ -64,26 +94,26 @@ export default class _ extends React.Component {
             })}
           </div>
           <div className="">
-            { this.state.entries.length >= this.state.maxLines ? null :
-            <input
-              disabled={
-                Object.keys(players)[playerIndex] !==
-                (this.props.authUser ? this.props.authUser.uid : "")
-              }
-              className="textarea f"
-              placeholder={
-                Object.keys(players)[playerIndex] !==
-                (this.props.authUser ? this.props.authUser.uid : "")
-                  ? playersObj[players[playerIndex]] + " is typing"
-                  : "it's your turn!"
-              }
-              cols="100"
-              //value = message; { Object.keys(players)[playerIndex]  !== this.props.uid ? message : "" }
-              value={message}
-              onKeyUp={this.onKeyUp}
-              onChange={e => this.setState({ message: e.target.value })}
-            />
-            }
+            {this.state.entries.length >= this.state.maxLines ? null : (
+              <input
+                disabled={
+                  Object.keys(players)[playerIndex] !==
+                  (this.props.authUser ? this.props.authUser.uid : "")
+                }
+                className="textarea f"
+                placeholder={
+                  Object.keys(players)[playerIndex] !==
+                  (this.props.authUser ? this.props.authUser.uid : "")
+                    ? playersObj[players[playerIndex]] + " is typing"
+                    : "it's your turn!"
+                }
+                cols="100"
+                //value = message; { Object.keys(players)[playerIndex]  !== this.props.uid ? message : "" }
+                value={message}
+                onKeyUp={this.onKeyUp}
+                onChange={e => this.setState({ message: e.target.value })}
+              />
+            )}
           </div>
         </div>
         <div className="stats">
@@ -168,33 +198,61 @@ export default class _ extends React.Component {
           console.log(res);
           console.log(res.entities[0].name);
           //get the image for each word
-          let wordQueries = res.entities.map(v => ("https://api.qwant.com/api/search/images?count=1&q=" + v.name.replace(/\s/g, "%20")));
+          // let wordQueries = res.entities.map(v => ("https://api.qwant.com/api/search/images?count=1&q=" + v.name.replace(/\s/g, "%20")));
           let words = [];
 
+          res.entities.forEach((v, i) => {
+            axios
+              .get(
+                "https://cors-anywhere.herokuapp.com/" +
+                  "https://api.qwant.com/api/search/images?count=1&q=" +
+                  v.name.replace(/\s/g, "%20")
+              )
+              .then(response => {
+                console.log(response.data.data.result.items[0].media);
+                words.push({
+                  word: v.name.replace(/\s/g, ""),
+                  url: response.data.data.result.items[0].media
+                });
 
-          wordQueries.forEach((wordQuery, i) => {
-            console.log(wordQuery);
-            axios.get('https://cors-anywhere.herokuapp.com/' + wordQuery)
-            .then((response) => {
-              console.log(response.data.data.result.items[0].media);
-              words.push(response.data.data.result.items[0].media);
-
-              if (i === wordQueries.length - 1) {
-                console.log('words', words);
-                db
-                  .ref(`/players/${this.props.authUser.uid}`)
-                  .once("value")
-                  .then(snapshot => {
-                    db.ref(`/${this.id}/entries`).push({
-                      name: snapshot.val(),
-                      message,
-                      images: words
+                if (i === res.entities.length - 1) {
+                  console.log("words", words);
+                  db
+                    .ref(`/players/${this.props.authUser.uid}`)
+                    .once("value")
+                    .then(snapshot => {
+                      db.ref(`/${this.id}/entries`).push({
+                        name: snapshot.val(),
+                        message,
+                        images: words
+                      });
                     });
-                  });
-              }
-            })
+                }
+              });
           });
 
+          // wordQueries.forEach((wordQuery, i) => {
+          //   console.log(wordQuery);
+          //   axios.get('https://cors-anywhere.herokuapp.com/' + wordQuery)
+          //   .then((response) => {
+          //     console.log(response.data.data.result.items[0].media);
+          //     words.push({ , url: response.data.data.result.items[0].media });
+
+          //     if (i === wordQueries.length - 1) {
+          //       console.log('words', words);
+          //       db
+          //         .ref(`/players/${this.props.authUser.uid}`)
+          //         .once("value")
+          //         .then(snapshot => {
+          //           db.ref(`/${this.id}/entries`).push({
+          //             name: snapshot.val(),
+          //             message,
+          //             images: words
+          //           });
+          //         });
+          //     }
+          //   })
+          // });
 
           /*
            *  UNSPLASH IMAGES
@@ -212,7 +270,6 @@ export default class _ extends React.Component {
           //       images: words
           //     });
           //   });
-
         });
 
       this.setState({ message: "" });
