@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars*/
 
 import React from "react";
+import axios from 'axios';
 import "./index.css";
 import { db, firestore } from "../../firebase/firebase";
 //const NLP = require('google-nlp');
@@ -167,25 +168,35 @@ export default class _ extends React.Component {
           console.log(res);
           console.log(res.entities[0].name);
           //get the image for each word
+          let wordQueries = res.entities.map(v => ("https://api.qwant.com/api/search/images?count=1&q=" + v.name.replace(/\s/g, "%20")));
+          let words = [];
 
-          let words = res.entities.map(
-            v =>
-              "https://source.unsplash.com/500x500/?" +
-              v.name.replace(/\s/g, "")
-          );
 
-          console.log(words);
+          wordQueries.forEach((wordQuery, i) => {
+            console.log(wordQuery);
+            axios.get('https://cors-anywhere.herokuapp.com/' + wordQuery)
+            .then((response) => {
+              console.log(response.data.data.result.items[0].media);
+              words.push(response.data.data.result.items[0].media);
 
-          db
-            .ref(`/players/${this.props.authUser.uid}`)
-            .once("value")
-            .then(snapshot => {
-              db.ref(`/${this.id}/entries`).push({
-                name: snapshot.val(),
-                message,
-                images: words
-              });
-            });
+              if (i === wordQueries.length - 1) {
+                console.log('words', words);
+                db
+                  .ref(`/players/${this.props.authUser.uid}`)
+                  .once("value")
+                  .then(snapshot => {
+                    db.ref(`/${this.id}/entries`).push({
+                      name: snapshot.val(),
+                      message,
+                      images: words
+                    });
+                  });
+              }
+            })
+          });
+
+
+          // let words = res.entities.map(v => "https://source.unsplash.com/500x500/?" + v.name.replace(/\s/g, ''));
 
           // words = [];
           // forEach(entity in entities){

@@ -1,5 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
+import axios from 'axios';
 import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
 import Header from "../Header";
 import Home from "../Home";
@@ -36,6 +37,9 @@ export default class _ extends React.Component {
 
 
   componentDidMount() {
+    axios.get('https://cors-anywhere.herokuapp.com/https://api.qwant.com/api/search/images?count=1&q=william%20shakespeare', {})
+    .then(data => console.log('data', data));
+
     auth.onAuthStateChanged(user => {
       if (user) {
         this.setState({ authUser: user });
