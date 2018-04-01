@@ -3,7 +3,13 @@
   background-color: #009E44;
   align-items: center;
   justify-content: space-between;
-  padding: 0 1rem; }
+  padding: 0 1rem;
+  position: fixed;
+  top: 0;
+  width: 100vw;
+  margin: 0 auto;
+  flex-direction: row;
+}
 
 h4 {
   font-family: 'Cabin Sketch', cursive;

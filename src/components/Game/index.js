@@ -204,8 +204,7 @@ export default class _ extends React.Component {
           res.entities.forEach((v, i) => {
             axios
               .get(
-                "https://cors-anywhere.herokuapp.com/" +
-                  "https://api.qwant.com/api/search/images?count=1&q=" +
+                 "https://api.qwant.com/api/search/images?count=1&q=" +
                   v.name.replace(/\s/g, "%20")
               )
               .then(response => {
