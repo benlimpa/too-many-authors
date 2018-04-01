@@ -2,7 +2,7 @@
 
 import React from "react";
 import "./index.css";
-import { db } from "../../firebase/firebase";
+import { db, firestore } from "../../firebase/firebase";
 import UidProvider from "../../firebase/UidProvider";
 const NLP = require('google-nlp');
 
@@ -84,6 +84,7 @@ class GamePage extends React.Component {
   }
 
   componentDidMount() {
+    console.log('THIS.PROPS.UID', this.props.uid)
     db.ref(`/${this.id}/players/${this.props.uid}`).set({ name: 'bob', active: false });
     db.ref(`/${this.id}/players`).on('value', snap => {
       this.setState({ players: Object.values(snap.val() || {}) });
