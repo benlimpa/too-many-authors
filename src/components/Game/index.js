@@ -24,6 +24,10 @@ export default class _ extends React.Component {
   id = this.props.id;
 
   render() {
+    if (this.props.authUser)
+      db.ref(`/players/${this.props.authUser.uid}`).on('value', snap => {
+        db.ref(`/${this.id}/players/${this.props.authUser.uid}`).set({ name: snap.val(), active: false });
+      });
     let { entries, message, rounds, players } = this.state;
     return (
       <div className="game row f">
@@ -90,12 +94,7 @@ export default class _ extends React.Component {
   }
 
   componentDidMount() {
-    console.log('this.props.authUser.uid', this.props.authUser.uid)
-
-    db.ref(`/players/${this.props.authUser.uid}`).on('value', snap => {
-      db.ref(`/${this.id}/players/${this.props.authUser.uid}`).set({ name: snap.val(), active: false });
-    });
-
+    // console.log('this.props.authUser.uid', this.props.authUser.uid)
     console.log(players);
 
     // db.ref(`/${this.id}/players/${this.props.authUser.uid}`).set({ name: players[this.props.authUser.uid], active: false });

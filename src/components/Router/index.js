@@ -51,11 +51,11 @@ export default class _ extends React.Component {
     return (
       <BrowserRouter>
         <div>
-          <Route path="/" render={(props) => <Header authUser={auth.currentUser} />} />
+          <Route path="/" render={(props) => <Header authUser={this.state.authUser} />} />
           <Switch>
             <RouteWhenAuthorized exact path="/" component={Home} />
             <Route exact path="/login" component={Login} />
-            <Route exact path="/game/:id" render={(p) => <Game id={p.match.params.id} authUser={auth.currentUser} />} />
+            <Route exact path="/game/:id" render={(p) => <Game id={p.match.params.id} authUser={this.state.authUser} />} />
             <Route path="/*" component={() => <Redirect to="/" />} />
           </Switch>
         </div>
