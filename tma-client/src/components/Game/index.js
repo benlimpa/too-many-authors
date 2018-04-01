@@ -1,8 +1,14 @@
-<<<<<<< HEAD
+
 import React from 'react';
 import './index.css';
 import { firestore } from  '../../firebase/firebase';
 import UidProvider from '../../firebase/UidProvider';
+
+import { db } from "../../firebase/firebase";
+
+const NLP = require('google-nlp');
+
+
 var url=window.location.href;
 var id=url.split('/')[4];
 var maxRounds = 0;
@@ -17,17 +23,9 @@ let arrayNames = names.map(item => <div key={item}> {item}</div>)
 var nList=names.join();
 var title = "Title of the game";
 var turn = 0;
-=======
-/* eslint-disable no-unused-vars*/
-
-import React from "react";
-import "./index.css";
-import { db } from "../../firebase/firebase";
-import UidProvider from "../../firebase/UidProvider";
-const NLP = require('google-nlp');
 
 
->>>>>>> 3599a8490fdfca59f4f9a7bbf2634d700f60a381
+
 export default class _ extends React.Component {
   render() {
     return (
