@@ -62,9 +62,9 @@ export default class _ extends React.Component {
           <div className="">
 
             <input
-              //disabled= { Object.keys(players)[currentPlayer] !== this.props.uid }
+              disabled= { Object.keys(players)[currentPlayer] !== ((this.props.authUser) ? this.props.authUser.uid : '') }
               className="textarea f"
-              placeholder = { Object.keys(players)[currentPlayer]  !== this.props.uid ? playersObj[players[currentPlayer]] + " is typing" : "it's your turn!"}
+              placeholder = { Object.keys(players)[currentPlayer]  !== ((this.props.authUser) ? this.props.authUser.uid : '') ? playersObj[players[currentPlayer]] + " is typing" : "it's your turn!"}
               cols="100"
               //value = message; { Object.keys(players)[currentPlayer]  !== this.props.uid ? message : "" }
               value = { message }
@@ -159,7 +159,7 @@ export default class _ extends React.Component {
         // }
       });
 
-      this.setState({ message: "" });
+      this.setState({ message: "", currentPlayer: (this.state.currentPlayer + 1) % this.state.players.length});
     }
   };
 }
