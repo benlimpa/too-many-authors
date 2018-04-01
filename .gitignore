@@ -1,1 +1,4 @@
 ./tma-client/node-modules
+tma-client/src/components/Header/index.js
+tma-client/package-lock.json
+*.json
