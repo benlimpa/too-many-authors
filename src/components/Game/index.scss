@@ -1,51 +1,44 @@
+@import url("https://fonts.googleapis.com/css?family=Alegreya+Sans+SC%7CCabin+Sketch%7CIndie+Flower%7CMarcellus+SC%7CPT+Mono%7CPress+Start+2P");
 .game {
   height: calc(100vh - 3rem);
-  justify-content: center;
-
   input {
-    padding: 0.5rem;
-    font-size: 1.7rem;
-    outline: 0;
-  }
+  justify-content: center; }
 
-  .entries {
-    background-color: #809FB0;
-    justify-content: flex-end;
-    overflow: scroll;
-    display: block;
-  }
+.game input {
+  font-family: 'Indie Flower', cursive;
+  padding: 0.5rem;
+  font-size: 1.7rem;
+  outline: 0; }
 
-  .entry {
-    padding: 0.5rem 1rem;
+.game .entries {
+  background-color: #809FB0;
+  font-family: 'Indie Flower', cursive;
+  justify-content: flex-end;
+  overflow: scroll;
+  display: block; }
 
-    .name {
-      margin-left: 0.5rem;
-    }
-  }
+.game .entry {
+  padding: 0.5rem 1rem; }
 
-  .images {
-    justify-content: space-between;
+.game .entry .name {
+  margin-left: 0.5rem; }
 
-    img {
-      height: 10rem;
-      width: 15rem;
-      margin: 0.5rem;
-    }
-  }
+.game .images {
+  justify-content: space-between; }
 
-  .entries-input-container {
+.game .images img {
+  height: 10rem;
+  width: 15rem;
+  margin: 0.5rem; }
 
-  }
+.game .stats {
+  margin-top: 15px;
+  font-family: 'Press Start 2P', cursive;
+  margin-left: 2rem; }
 
-  .stats {
-    margin-left: 2rem;
-  }
-
-  .active-dot {
-    height: 1rem;
-    width: 1rem;
-    background-color: #00B54D;
-    border-radius: 0.5rem;
-    margin-right: 0.5rem;
-  }
-}
+.game .active-dot {
+  height: 1rem;
+  width: 1rem;
+  background-color: #00B54D;
+  border-radius: 0.5rem;
+  margin-right: 0.5rem; }

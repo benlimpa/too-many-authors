@@ -1,24 +1,16 @@
 .home {
-  padding: 1rem;
-
-  h2 {
-    margin-left: 1rem;
-  }
-
-  .plus {
-    height: 20rem;
-  }
-
-  .preview-container {
-    flex-wrap: wrap;
-
-  }
-
-  .preview{
+  padding: 1rem; }
+  .home h2 {
+    margin-left: 1rem; }
+  .home .plus {
+    opacity: 0.5;
+    height: 20rem; }
+  .home .preview-container {
+    flex-wrap: wrap; }
+  .home .preview {
     flex: 1;
     min-width: 25rem;
     height: 15rem;
-    background-color: white;
-    margin: 1rem;
-  }
-}
+    background-color: #1985a1;
+    box-shadow: 3px 7px #4c5c68;
+    margin: 1rem; }
