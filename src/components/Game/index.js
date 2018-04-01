@@ -196,12 +196,23 @@ export default class _ extends React.Component {
           });
 
 
+          /*
+           *  UNSPLASH IMAGES
+           */
+
           // let words = res.entities.map(v => "https://source.unsplash.com/500x500/?" + v.name.replace(/\s/g, ''));
 
-          // words = [];
-          // forEach(entity in entities){
-          //   words
-          // }
+          // db
+          //   .ref(`/players/${this.props.authUser.uid}`)
+          //   .once("value")
+          //   .then(snapshot => {
+          //     db.ref(`/${this.id}/entries`).push({
+          //       name: snapshot.val(),
+          //       message,
+          //       images: words
+          //     });
+          //   });
+
         });
 
       this.setState({ message: "" });

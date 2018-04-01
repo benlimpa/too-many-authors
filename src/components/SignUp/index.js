@@ -1,11 +1,13 @@
 import React from "react";
 import * as auth from "../../firebase/auth";
-import { withRouter, Link } from "react-router-dom";
+import { db } from "../../firebase/firebase";
+import { withRouter } from "react-router-dom";
 import "./index.css";
 
-const LoginPage = ({ history }) => (<LoginCorePage history={history} />);
+const SignUpPage = ({ history }) => (<SignUpCorePage history={history} />);
 
 const INIT_STATE = {
+  username: "",
   email: "",
   password: "",
   error: null
@@ -15,19 +17,20 @@ const byPropKey = (propertyName, value) => () => ({
   [propertyName]: value,
 });
 
-class LoginCorePage extends React.Component {
+class SignUpCorePage extends React.Component {
   state = {
     ...INIT_STATE
   };
 
   handleSubmit = evt => {
     evt.preventDefault();
-    const {email, password} = this.state;
+    const {username, email, password} = this.state;
     const {history} = this.props;
     
-    auth.doSignInWithEmailAndPassword(email, password)
-    .then(() => {
+    auth.doCreateUserWithEmailAndPassword(email, password)
+    .then((authUser) => {
       this.setState(() => ({...INIT_STATE}));
+      db.ref(`/players/${authUser.uid}`).set(username);
       history.push('/');
     })
     .catch(err => {
@@ -41,6 +44,11 @@ class LoginCorePage extends React.Component {
         <form onSubmit={this.handleSubmit}>
           <input
             type="text"
+            value={this.state.username}
+            onChange={e => this.setState({ username: e.target.value})}
+          />
+          <input
+            type="text"
             value={this.state.email}
             onChange={e => this.setState({ email: e.target.value })}
           />
@@ -49,13 +57,12 @@ class LoginCorePage extends React.Component {
             value={this.state.password}
             onChange={e => this.setState({ password: e.target.value })}
           />
-          <button type="submit">Sign In</button>
+          <button type="submit">Sign Up</button>
         </form>
-        {this.state.error && <p>Login failed</p>}
-        <Link to={"/signup"}>Create a new Account</Link>
+        {this.state.error && <p>SignUp failed</p>}
       </section>
     );
   }
 }
 
-export default withRouter(LoginPage);
+export default withRouter(SignUpPage);

@@ -6,6 +6,7 @@ import Header from "../Header";
 import Home from "../Home";
 import Game from "../Game";
 import Login from "../Login";
+import SignUp from "../SignUp";
 import { storageKey, auth, isAuthenticated } from "../../firebase/firebase";
 import "./index.css";
 
@@ -59,6 +60,7 @@ export default class _ extends React.Component {
           <Switch>
             <RouteWhenAuthorized exact path="/" component={Home} />
             <Route exact path="/login" component={Login} />
+            <Route exact path="/signup" component={SignUp} />
             <Route exact path="/game/:id" render={(p) => <Game id={p.match.params.id} authUser={this.state.authUser} />} />
             <Route path="/*" component={() => <Redirect to="/" />} />
           </Switch>
