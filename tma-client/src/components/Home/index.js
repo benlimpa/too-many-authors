@@ -5,11 +5,10 @@ import { Link } from "react-router-dom";
 import { generate } from "shortid";
 import { db } from "../../firebase/firebase";
 import "./index.css";
-
 export default class _ extends React.Component {
   state = {
-    games: [],
-    archives: []
+    games: [{},{},{}],
+    archives: [{},{}]
   };
 
   render() {

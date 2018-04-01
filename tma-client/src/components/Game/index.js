@@ -74,9 +74,9 @@ class GamePage extends React.Component {
           <p id="gamecode">Game Code {id} </p>
           <p id="turnIs"> It is {names[turn]}s turn</p>
           <h2 class="h">Players</h2>
-          <ul id="names">
+          <p id="names">
           {arrayNames}
-          </ul>
+          </p>
             </div>
             <div>
             <form>
