@@ -24,7 +24,7 @@ class LoginCorePage extends React.Component {
     evt.preventDefault();
     const {email, password} = this.state;
     const {history} = this.props;
-    
+
     auth.doSignInWithEmailAndPassword(email, password)
     .then(() => {
       this.setState(() => ({...INIT_STATE}));
@@ -41,10 +41,12 @@ class LoginCorePage extends React.Component {
         <form onSubmit={this.handleSubmit}>
           <input
             type="text"
+            placeholder=" Email"
             value={this.state.email}
             onChange={e => this.setState({ email: e.target.value })}
           />
           <input
+            placeholder=" Password"
             type="password"
             value={this.state.password}
             onChange={e => this.setState({ password: e.target.value })}
@@ -52,7 +54,7 @@ class LoginCorePage extends React.Component {
           <button type="submit">Sign In</button>
         </form>
         {this.state.error && <p>Login failed</p>}
-        <Link to={"/signup"}>Create a new Account</Link>
+        <Link id="acc" to={"/signup"}>or Create a new Account</Link>
       </section>
     );
   }

@@ -26,7 +26,7 @@ class SignUpCorePage extends React.Component {
     evt.preventDefault();
     const {username, email, password} = this.state;
     const {history} = this.props;
-    
+
     auth.doCreateUserWithEmailAndPassword(email, password)
     .then((authUser) => {
       this.setState(() => ({...INIT_STATE}));
@@ -43,16 +43,19 @@ class SignUpCorePage extends React.Component {
       <section>
         <form onSubmit={this.handleSubmit}>
           <input
+            placeholder=" Username"
             type="text"
             value={this.state.username}
             onChange={e => this.setState({ username: e.target.value})}
           />
           <input
+            placeholder =" Email"
             type="text"
             value={this.state.email}
             onChange={e => this.setState({ email: e.target.value })}
           />
           <input
+            placeholder =" Password"
             type="password"
             value={this.state.password}
             onChange={e => this.setState({ password: e.target.value })}
