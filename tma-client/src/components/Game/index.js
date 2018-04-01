@@ -6,6 +6,14 @@ import { db, firestore } from "../../firebase/firebase";
 import UidProvider from "../../firebase/UidProvider";
 //const NLP = require('google-nlp');
 
+const players = {
+    "8Dr3iPTM57b7FpbVBNAhUTW8Xhp2" : "Ben",
+    "DiOzjTGOTQXpR36pHP4mQuMacdA3" : "Hakan",
+    "P1wXYlu9lkXZt3QA4S7q9Yk0A5a2" : "Gautam",
+    "IKTQwJzNbshEXyNj8gDjMLEnY0Y2" : "Sandro",
+    "ZddSsMJLAvgE9jnH46KfOun3JXZ2" : "Michael"
+};
+
 export default class _ extends React.Component {
   render() {
     return (
@@ -94,7 +102,15 @@ class GamePage extends React.Component {
 
   componentDidMount() {
     console.log('THIS.PROPS.UID', this.props.uid)
-    db.ref(`/${this.id}/players/${this.props.uid}`).set({ name: 'bob', active: false });
+
+    // db.ref(`/players/${this.props.uid}`).on('value', snap => {
+    //   db.ref(`/${this.id}/players/${this.props.uid}`).set({ name: snap.val(), active: false });
+    // });
+
+    console.log(players);
+
+    db.ref(`/${this.id}/players/${this.props.uid}`).set({ name: players[this.props.uid], active: false });
+
     db.ref(`/${this.id}/players`).on('value', snap => {
       this.setState({ players: Object.values(snap.val() || {}) });
     });
@@ -122,22 +138,31 @@ class GamePage extends React.Component {
         }
       ).then(res => res.json()).then(res => {
         console.log(res);
-      });
+        console.log(res.entities[0].name);
+        //get the image for each word
 
-      db
-        .ref(`/players/${this.props.uid}`)
-        .once("value")
-        .then(snapshot => {
-          db.ref(`/${this.id}/entries`).push({
-            name: snapshot.val(),
-            message,
-            images: [
-              "http://www.pixedelic.com/themes/geode/demo/wp-content/uploads/sites/4/2014/04/placeholder4.png",
-              "http://www.pixedelic.com/themes/geode/demo/wp-content/uploads/sites/4/2014/04/placeholder4.png",
-              "http://www.pixedelic.com/themes/geode/demo/wp-content/uploads/sites/4/2014/04/placeholder4.png"
-            ]
+
+        let words = res.entities.map(v => "https://source.unsplash.com/500x500/?" + v.name.replace(/\s/g, ''));
+
+        console.log(words);
+
+        db
+          .ref(`/players/${this.props.uid}`)
+          .once("value")
+          .then(snapshot => {
+            db.ref(`/${this.id}/entries`).push({
+              name: snapshot.val(),
+              message,
+              images: words
+            });
           });
-        });
+
+
+        // words = [];
+        // forEach(entity in entities){
+        //   words
+        // }
+      });
 
       this.setState({ message: "" });
     }
