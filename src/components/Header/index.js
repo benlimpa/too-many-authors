@@ -29,12 +29,12 @@ class HeaderCore extends React.Component {
 
   signOutAndRedirect = () =>
     auth.doSignOut().then(() => this.props.history.push("/login"));
-  
+
   componentDidUpdate(prevProps, prevState)
   {
     if (this.props.authUser === prevProps.authUser)
       return;
-    
+
     if (this.props.authUser) {
       db.ref(`/players/${this.props.authUser.uid}`).on("value", snap => {
         console.log("Setting name: " + snap.val());
@@ -51,12 +51,13 @@ class HeaderCore extends React.Component {
         <Link to="/">
           <h4>Too Many Authors</h4>
         </Link>
+        <p>{this.state.currentUsername}</p>
         {this.props.authUser && (
-          <button type="button" onClick={this.signOutAndRedirect}>
+          <button type="button" id="buttons" onClick={this.signOutAndRedirect}>
             Signout
           </button>
         )}
-        <p>{this.state.currentUsername}</p>
+
         <div className="row" />
       </div>
     );
