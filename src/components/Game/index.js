@@ -196,38 +196,42 @@ export default class _ extends React.Component {
         .then(res => res.json())
         .then(res => {
           console.log(res);
-          console.log(res.entities[0].name);
+          // if(!res.entities[0].name){
+          //   res.entities[0].name = message;
+          // };
           //get the image for each word
           // let wordQueries = res.entities.map(v => ("https://api.qwant.com/api/search/images?count=1&q=" + v.name.replace(/\s/g, "%20")));
           let words = [];
 
-          res.entities.forEach((v, i) => {
-            axios
-              .get(
-                 "https://api.qwant.com/api/search/images?count=1&q=" +
-                  v.name.replace(/\s/g, "%20")
-              )
-              .then(response => {
-                console.log(response.data.data.result.items[0].media);
-                words.push({
-                  word: v.name.replace(/\s/g, ""),
-                  url: response.data.data.result.items[0].media
-                });
 
-                if (i === res.entities.length - 1) {
-                  console.log("words", words);
-                  db
-                    .ref(`/players/${this.props.authUser.uid}`)
-                    .once("value")
-                    .then(snapshot => {
-                      db.ref(`/${this.id}/entries`).push({
-                        name: snapshot.val(),
-                        message,
-                        images: words
+          if(res) {
+            res.entities.forEach((v, i) => {
+              axios
+                .get(
+                  "https://api.qwant.com/api/search/images?count=1&q=" +
+                  v.name.replace(/\s/g, "%20")
+                )
+                .then(response => {
+                  console.log(response.data.data.result.items[0].media);
+                  words.push({
+                    word: v.name.replace(/\s/g, ""),
+                    url: response.data.data.result.items[0].media
+                  });
+
+                  if (i === res.entities.length - 1) {
+                    console.log("words", words);
+                    db
+                      .ref(`/players/${this.props.authUser.uid}`)
+                      .once("value")
+                      .then(snapshot => {
+                        db.ref(`/${this.id}/entries`).push({
+                          name: snapshot.val(),
+                          message,
+                          images: words
+                        });
                       });
-                    });
-                }
-              }).catch(err => {
+                  }
+                }).catch(err => {
                 console.log("errored: " + err);
                 words.push({
                   word: v.name.replace(/\s/g, ""),
@@ -246,10 +250,58 @@ export default class _ extends React.Component {
                         images: words
                       });
                     });
-                  }
+                }
               });
-          });
+            });
+          }
+          else{
+            axios
+              .get(
+                "https://api.qwant.com/api/search/images?count=1&q=" +
+                message.replace(/\s/g, "%20")
+              )
+              .then(response => {
+                console.log(response.data.data.result.items[0].media);
+                words.push({
+                  word: message.replace(/\s/g, ""),
+                  url: response.data.data.result.items[0].media
+                });
 
+                
+                console.log("words", words);
+                db
+                  .ref(`/players/${this.props.authUser.uid}`)
+                  .once("value")
+                  .then(snapshot => {
+                    db.ref(`/${this.id}/entries`).push({
+                      name: snapshot.val(),
+                      message,
+                      images: words
+                    });
+                  });
+
+              }).catch(err => {
+              console.log("errored: " + err);
+              words.push({
+                word: message.replace(/\s/g, ""),
+                url: "https://source.unsplash.com/500x500/?" + message.replace(/\s/g, '')
+              });
+
+
+              console.log("words", words);
+              db
+                .ref(`/players/${this.props.authUser.uid}`)
+                .once("value")
+                .then(snapshot => {
+                  db.ref(`/${this.id}/entries`).push({
+                    name: snapshot.val(),
+                    message,
+                    images: words
+                  });
+                });
+
+            });
+          }
           // wordQueries.forEach((wordQuery, i) => {
           //   console.log(wordQuery);
           //   axios.get('https://cors-anywhere.herokuapp.com/' + wordQuery)
