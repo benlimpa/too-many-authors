@@ -1,7 +1,9 @@
 @import url("https://fonts.googleapis.com/css?family=Alegreya+Sans+SC%7CCabin+Sketch%7CIndie+Flower%7CMarcellus+SC%7CPT+Mono%7CPress+Start+2P");
 .game {
   height: calc(100vh - 3rem);
-  justify-content: center; }
+  justify-content: center;
+  margin-top: 30px;
+}
 
 .game input {
   font-family: 'Indie Flower', cursive;
@@ -10,6 +12,7 @@
   outline: 0; }
 
 .game .entries {
+  margin-top: 30px;
   background-color: #809FB0;
   font-family: 'Indie Flower', cursive;
   justify-content: flex-end;
@@ -31,7 +34,7 @@
   margin: 0.5rem; }
 
 .game .stats {
-  margin-top: 15px;
+  margin-top: 30px;
   font-family: 'Press Start 2P', cursive;
   margin-left: 2rem; }
 
