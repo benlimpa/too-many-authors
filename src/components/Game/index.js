@@ -101,7 +101,6 @@ export default class _ extends React.Component {
 
   componentDidMount() {
     // console.log('this.props.authUser.uid', this.props.authUser.uid)
-    console.log(players);
 
     // db.ref(`/${this.id}/players/${this.props.authUser.uid}`).set({ name: players[this.props.authUser.uid], active: false });
 
