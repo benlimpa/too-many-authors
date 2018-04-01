@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import React from 'react';
 import './index.css';
 import { firestore } from  '../../firebase/firebase';
@@ -16,46 +17,41 @@ let arrayNames = names.map(item => <div key={item}> {item}</div>)
 var nList=names.join();
 var title = "Title of the game";
 var turn = 0;
+=======
+/* eslint-disable no-unused-vars*/
+
+import React from "react";
+import "./index.css";
+import { db } from "../../firebase/firebase";
+import UidProvider from "../../firebase/UidProvider";
+const NLP = require('google-nlp');
+
+
+>>>>>>> 3599a8490fdfca59f4f9a7bbf2634d700f60a381
 export default class _ extends React.Component {
-    render() {
-        return (<UidProvider>{(uid) => (<GamePage uid={uid} id={this.props.match.params.id} />)}</UidProvider>);
-    }
+  render() {
+    return (
+      <UidProvider>
+        {uid => <GamePage uid={uid} id={this.props.match.params.id} />}
+      </UidProvider>
+    );
+  }
 }
 
 class GamePage extends React.Component {
-    state = {
-        entries: [],
-    }
+  state = {
+    entries: [],
+    message: '',
+    rounds: 0,
+    players: []
+  }
 
-    id = this.props.id;
-
-    componentDidMount() {
-        console.log(this.id);
-
-        firestore.collection('games').doc(this.id).collection('entries').get().then(function(snapshot) {
-            this.setState({entries: snapshot.docs});
-        })
-        .catch(function(err) {console.error("no matching entries: " + err)});
-    }
-
-    onKeyUp = (e) => {
-
-        if(e.keyCode === 13 && e.target.value !== ''){
-            e.preventDefault();
-            firestore.collection('games').doc(this.id).collection('entries').add({
-                uid: this.props.uid,
-                timeStamp: Date.now(),
-                message: e.target.value
-            })
-            .catch(function(error) {
-                console.error("error writing document: ", error);
-            });
-            e.target.value = '';
-        }
-    }
+  id = this.props.id;
 
   render() {
+    let { entries, message, rounds, players } = this.state;
     return (
+<<<<<<< HEAD
 
         <div class="container">
         <div id="gameTitle">
@@ -77,8 +73,87 @@ class GamePage extends React.Component {
                 </textarea>
             </form>
             </div>
+=======
+      <div className="game row f">
+        <div className="entries-input-container">
+          <div className="entries">
+            {entries.map((entry, i) => {
+              return (
+                <div key={i} className="entry">
+                  <h4 className="name">{entry.name || 'name'}</h4>
+                  <h4 className="message">{entry.message}</h4>
+                  <div className="images row">
+                    {(entry.images || ['','','']).map((url, i) => {
+                      return (
+                        <img
+                          key={i}
+                          src={url || 'http://www.pixedelic.com/themes/geode/demo/wp-content/uploads/sites/4/2014/04/placeholder4.png'}
+                          alt="image"
+                        />
+                      );
+                    })}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+          <div className="">
+            <input
+              className="textarea f"
+              placeholder="Type a message"
+              cols="100"
+              value={message}
+              onKeyUp={this.onKeyUp}
+              onChange={e => this.setState({ message: e.target.value })}
+            />
+          </div>
+>>>>>>> 3599a8490fdfca59f4f9a7bbf2634d700f60a381
         </div>
+        <div className="stats">
+          <h2>Players</h2>
+          {players.map((player, i) => {
+            return (
+              <div key={i} className="row" style={{ alignItems: 'center', marginLeft: player.active ? '-1.5rem' : 0 }}>
+                {player.active ? <div className="active-dot"></div> : null}
+                <h3>{player.name || 'name'}</h3>
+              </div>
+            );
+          })}
 
+          <h2 style={{ marginTop: '1rem' }}>Game Stats</h2>
+          <h3>{rounds} / 3 rounds</h3>
+          <h3>code: {this.id}</h3>
+        </div>
+      </div>
     );
+  }
+
+  componentDidMount() {
+    db.ref(`/${this.id}/players/${this.props.uid}`).set({ name: 'bob', active: false });
+    db.ref(`/${this.id}/players`).on('value', snap => {
+      this.setState({ players: Object.values(snap.val() || {}) });
+    });
+    db.ref(`/${this.id}/entries`).on('value', snap => {
+      this.setState({ entries: Object.values(snap.val() || {}) });
+    });
+  }
+
+  onKeyUp = e => {
+    let { message } = this.state;
+    if (e.keyCode === 13 && message !== '') {
+      // fetch('')
+      // .then()
+
+      db.ref(`/${this.id}/entries`).push({
+        message,
+        images: [
+          'http://www.pixedelic.com/themes/geode/demo/wp-content/uploads/sites/4/2014/04/placeholder4.png',
+          'http://www.pixedelic.com/themes/geode/demo/wp-content/uploads/sites/4/2014/04/placeholder4.png',
+          'http://www.pixedelic.com/themes/geode/demo/wp-content/uploads/sites/4/2014/04/placeholder4.png'
+        ]
+      })
+
+      this.setState({ message: '' });
+    }
   }
 }

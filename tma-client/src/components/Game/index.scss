@@ -1,0 +1,51 @@
+.game {
+  height: calc(100vh - 3rem);
+  justify-content: center;
+
+  input {
+    padding: 0.5rem;
+    font-size: 1.7rem;
+    outline: 0;
+  }
+
+  .entries {
+    background-color: #809FB0;
+    justify-content: flex-end;
+    overflow: scroll;
+    display: block;
+  }
+
+  .entry {
+    padding: 0.5rem 1rem;
+
+    .name {
+      margin-left: 0.5rem;
+    }
+  }
+
+  .images {
+    justify-content: space-between;
+
+    img {
+      height: 10rem;
+      width: 15rem;
+      margin: 0.5rem;
+    }
+  }
+
+  .entries-input-container {
+
+  }
+
+  .stats {
+    margin-left: 2rem;
+  }
+
+  .active-dot {
+    height: 1rem;
+    width: 1rem;
+    background-color: #00B54D;
+    border-radius: 0.5rem;
+    margin-right: 0.5rem;
+  }
+}

@@ -1,10 +1,4 @@
 body {
-  --q: #262626;
-  --w: #4d4d4d;
-  --e: #808080;
-  --r: #d9d9d9;
-  --t: #f2f2f2;
-  --y: #ffffff;
   margin: 0;
   padding: 0;
   font-family: sans-serif;
@@ -24,7 +18,11 @@ html, body, div, a {
 h1, h2, h3, h4, h5, h6, a, input {
   margin: 0;
   font-weight: 300;
-  color: var(--q)
+  color: white;
+}
+
+input {
+  color: black;
 }
 
 a {
