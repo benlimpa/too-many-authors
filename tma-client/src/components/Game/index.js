@@ -2,6 +2,8 @@ import React from "react";
 import "./index.css";
 import { firestore } from "../../firebase/firebase";
 import UidProvider from "../../firebase/UidProvider";
+const NLP = require('google-nlp');
+
 
 export default class _ extends React.Component {
   render() {
@@ -26,21 +28,15 @@ class GamePage extends React.Component {
     firestore
       .collection("games")
       .doc(this.id)
-<<<<<<< HEAD
       .onSnapshot((docSnap) => {
         docSnap.ref.collection('entries').get().then((docs) => {this.setState({ entries: docs});})
         console.log("entries updated");
-=======
-      .collection("entries")
-      .get()
-      .then((snapshot) => {
-        this.setState({ entries: snapshot.docs });
->>>>>>> 2aaaa195827c8bda6e6312ededbc57c2da2b738b
       })
   }
 
   onKeyUp = e => {
     if (e.keyCode === 13 && e.target.value !== "") {
+      let text = e.target.value;
       e.preventDefault();
       firestore
         .collection("games")
@@ -55,6 +51,38 @@ class GamePage extends React.Component {
           console.error("error writing document: ", error);
         });
       e.target.value = "";
+
+      //nlp stuff
+      //	Import this module
+
+
+//	Google Cloud API key
+      const apiKey = "AIzaSyCvtPpagYGxMxyBQ4XGSYGWgEK4OnxouPU";
+
+// 	Text to send to Google NLP
+
+      console.log("text: " + text);
+
+// 	Instantiate he NLP class with your Google Cloud API key
+      let nlp = new NLP( apiKey );
+
+
+      /**
+       *  Analyze entities from the text string
+       */
+
+      nlp.analyzeEntities( text )
+        .then(function( entities ) {
+          // 	Output returned entities
+          console.log( 'Entities:', entities );
+        })
+        .catch(function( error ) {
+          // 	Error received, output the error
+          console.log( 'Error:', error.message );
+        })
+
+      //google image search each entity
+
     }
   };
 
