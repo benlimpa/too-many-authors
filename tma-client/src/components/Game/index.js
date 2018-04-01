@@ -117,10 +117,10 @@ class GamePage extends React.Component {
             },
             encodingType: "UTF8"
           }),
-          mode: "no-cors",
+          mode: "cors",
           method: "POST"
         }
-      ).then(res => {
+      ).then(res => res.json()).then(res => {
         console.log(res);
       });
 
