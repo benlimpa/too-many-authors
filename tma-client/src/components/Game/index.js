@@ -2,10 +2,9 @@
 
 import React from "react";
 import "./index.css";
-import { db } from "../../firebase/firebase";
+import { db, firestore } from "../../firebase/firebase";
 import UidProvider from "../../firebase/UidProvider";
-const NLP = require('google-nlp');
-
+//const NLP = require('google-nlp');
 
 export default class _ extends React.Component {
   render() {
@@ -20,10 +19,10 @@ export default class _ extends React.Component {
 class GamePage extends React.Component {
   state = {
     entries: [],
-    message: '',
+    message: "",
     rounds: 0,
     players: []
-  }
+  };
 
   id = this.props.id;
 
@@ -36,14 +35,17 @@ class GamePage extends React.Component {
             {entries.map((entry, i) => {
               return (
                 <div key={i} className="entry">
-                  <h4 className="name">{entry.name || 'name'}</h4>
+                  <h4 className="name">{entry.name || "name"}</h4>
                   <h4 className="message">{entry.message}</h4>
                   <div className="images row">
-                    {(entry.images || ['','','']).map((url, i) => {
+                    {(entry.images || ["", "", ""]).map((url, i) => {
                       return (
                         <img
                           key={i}
-                          src={url || 'http://www.pixedelic.com/themes/geode/demo/wp-content/uploads/sites/4/2014/04/placeholder4.png'}
+                          src={
+                            url ||
+                            "http://www.pixedelic.com/themes/geode/demo/wp-content/uploads/sites/4/2014/04/placeholder4.png"
+                          }
                           alt="image"
                         />
                       );
@@ -68,14 +70,21 @@ class GamePage extends React.Component {
           <h2>Players</h2>
           {players.map((player, i) => {
             return (
-              <div key={i} className="row" style={{ alignItems: 'center', marginLeft: player.active ? '-1.5rem' : 0 }}>
-                {player.active ? <div className="active-dot"></div> : null}
-                <h3>{player.name || 'name'}</h3>
+              <div
+                key={i}
+                className="row"
+                style={{
+                  alignItems: "center",
+                  marginLeft: player.active ? "-1.5rem" : 0
+                }}
+              >
+                {player.active ? <div className="active-dot" /> : null}
+                <h3>{player.name || "name"}</h3>
               </div>
             );
           })}
 
-          <h2 style={{ marginTop: '1rem' }}>Game Stats</h2>
+          <h2 style={{ marginTop: "1rem" }}>Game Stats</h2>
           <h3>{rounds} / 3 rounds</h3>
           <h3>code: {this.id}</h3>
         </div>
@@ -84,31 +93,54 @@ class GamePage extends React.Component {
   }
 
   componentDidMount() {
-    db.ref(`/${this.id}/players/${this.props.uid}`).set({ name: 'bob', active: false });
-    db.ref(`/${this.id}/players`).on('value', snap => {
+    db
+      .ref(`/${this.id}/players/${this.props.uid}`)
+      .set({ name: "bob", active: false });
+    db.ref(`/${this.id}/players`).on("value", snap => {
       this.setState({ players: Object.values(snap.val() || {}) });
     });
-    db.ref(`/${this.id}/entries`).on('value', snap => {
+    db.ref(`/${this.id}/entries`).on("value", snap => {
       this.setState({ entries: Object.values(snap.val() || {}) });
     });
   }
 
   onKeyUp = e => {
     let { message } = this.state;
-    if (e.keyCode === 13 && message !== '') {
-      // fetch('')
-      // .then()
+    if (e.keyCode === 13 && message !== "") {
+      fetch(
+        "https://language.googleapis.com/v1/documents:analyzeEntities?key=AIzaSyCvtPpagYGxMxyBQ4XGSYGWgEK4OnxouPU",
+        {
+          body: JSON.stringify({
+            document: {
+              type: "PLAIN_TEXT",
+              language: "EN",
+              content: message
+            },
+            encodingType: "UTF8"
+          }),
+          mode: "no-cors",
+          method: "POST"
+        }
+      ).then(res => {
+        console.log(res);
+      });
 
-      db.ref(`/${this.id}/entries`).push({
-        message,
-        images: [
-          'http://www.pixedelic.com/themes/geode/demo/wp-content/uploads/sites/4/2014/04/placeholder4.png',
-          'http://www.pixedelic.com/themes/geode/demo/wp-content/uploads/sites/4/2014/04/placeholder4.png',
-          'http://www.pixedelic.com/themes/geode/demo/wp-content/uploads/sites/4/2014/04/placeholder4.png'
-        ]
-      })
+      db
+        .ref(`/players/${this.props.uid}`)
+        .once("value")
+        .then(snapshot => {
+          db.ref(`/${this.id}/entries`).push({
+            name: snapshot.val(),
+            message,
+            images: [
+              "http://www.pixedelic.com/themes/geode/demo/wp-content/uploads/sites/4/2014/04/placeholder4.png",
+              "http://www.pixedelic.com/themes/geode/demo/wp-content/uploads/sites/4/2014/04/placeholder4.png",
+              "http://www.pixedelic.com/themes/geode/demo/wp-content/uploads/sites/4/2014/04/placeholder4.png"
+            ]
+          });
+        });
 
-      this.setState({ message: '' });
+      this.setState({ message: "" });
     }
-  }
+  };
 }
